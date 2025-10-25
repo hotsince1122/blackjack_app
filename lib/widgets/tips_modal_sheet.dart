@@ -13,7 +13,7 @@ class TipsModalSheet extends StatelessWidget {
       width: double.infinity,
       height: 450,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
         color: goldColor,
       ),
       child: Container(

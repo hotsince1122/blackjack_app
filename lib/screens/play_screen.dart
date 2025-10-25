@@ -1,6 +1,7 @@
 import 'package:blackjack/widgets/big_white_text.dart';
 import 'package:blackjack/widgets/gold_button.dart';
 import 'package:blackjack/engine/game_engine.dart';
+import 'package:blackjack/widgets/betting_modal_sheet.dart';
 
 import 'package:playing_cards/playing_cards.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,15 @@ class _PlayScreenState extends State<PlayScreen> {
   bool showBackCard = true;
 
   bool _isPlayerTurn = true;
+
+  Future<void> _openBettingModalSheet(BuildContext context) async {
+    await showModalBottomSheet(
+      isDismissible: false,
+      enableDrag: false,
+      context: context,
+      builder: (ctx) => const BettingModalSheet(),
+    );
+  }
 
   void isPlayerTurn() {
     setState(() {
@@ -107,7 +117,11 @@ class _PlayScreenState extends State<PlayScreen> {
       isPlayerTurn,
     );
 
-    engine.startGame();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await _openBettingModalSheet(context);
+
+      engine.startGame();
+    });
   }
 
   @override

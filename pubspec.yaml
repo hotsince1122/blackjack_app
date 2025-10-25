@@ -64,6 +64,10 @@ flutter:
   assets:
     - assets/images/blackjack.png
     - assets/images/casino.png
+    - assets/images/chips-1.png
+    - assets/images/chips-5.png
+    - assets/images/chips-25.png
+    - assets/images/chips-100.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
