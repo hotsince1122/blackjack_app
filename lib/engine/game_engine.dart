@@ -43,6 +43,9 @@ class GameEngine {
   int playerScore = 0;
   int dealerScore = 0;
 
+  double balance = 500; 
+  double bet = 25;
+
   Future<void> startGame() async {
     player.hand.clear();
     dealer.hand.clear();
@@ -65,6 +68,8 @@ class GameEngine {
     }
 
     if (player.isBlackjack()) {
+      balance += bet * 1.5;
+      bet = 100;
       gameOver('You won!');
       return;
     }
@@ -90,11 +95,15 @@ class GameEngine {
     await Future.delayed(const Duration(milliseconds: 600));
 
     if (player.isBlackjack()) {
+      balance += bet;
+      bet = 100;
       gameOver('You won!');
       return;
     }
 
     if (player.getTotal() > 21) {
+      balance -= bet;
+      bet = 100;
       gameOver('Dealer won!');
       return;
     }
@@ -121,6 +130,8 @@ class GameEngine {
 
     if(dealerScore > 21) {
       gameOver('Player won!');
+      balance += bet;
+      bet = 100;
       return;
     }
 
@@ -129,10 +140,15 @@ class GameEngine {
 
   void checkWinner() {
     if (dealerScore == playerScore) {
+      bet = 100;
       gameOver('Push!');
     } else if (dealerScore > playerScore) {
+      balance -= bet;
+      bet = 100;
       gameOver('Dealer won!');
     } else {
+      balance += bet;
+      bet = 100;
       gameOver('You won!');
     }
   }

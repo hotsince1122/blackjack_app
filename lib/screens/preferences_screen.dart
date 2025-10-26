@@ -1,80 +1,65 @@
 import 'package:flutter/material.dart';
 
 import 'package:blackjack/blackjack.dart';
-import 'package:blackjack/engine/game_engine.dart';
 import 'package:blackjack/widgets/chips_button.dart';
 import 'package:blackjack/widgets/brown_text.dart';
 import 'package:blackjack/widgets/brown_button.dart';
+import 'package:blackjack/widgets/betting_modal_sheet.dart';
 
-Color fancyLightBrown = Color.fromARGB(255, 101, 63, 26);
-Color fancyDarkBrown = Color.fromARGB(255, 89, 54, 21);
-
-Color darkGoldColor = const Color.fromARGB(255, 88, 72, 30);
-
-Future<void> goHomeScreen(
-  BuildContext context,
-  final void Function() homeScreen,
-) async {
-  Navigator.pop(context);
-  await Future.delayed(Duration(milliseconds: 260));
-  homeScreen();
-}
-
-class BettingModalSheet extends StatefulWidget {
-  const BettingModalSheet(this.homeScreen, this.engine, {super.key});
+class PreferencesScreen extends StatefulWidget {
+  const PreferencesScreen(this.homeScreen, this.setInitialBalance, {super.key});
 
   final void Function() homeScreen;
-  final GameEngine engine;
+  final double setInitialBalance;
 
   @override
-  State<BettingModalSheet> createState() {
-    return _BettingModalSheet();
-  }
+  State<PreferencesScreen> createState() => _PreferencesScreenState();
 }
 
-class _BettingModalSheet extends State<BettingModalSheet> {
+class _PreferencesScreenState extends State<PreferencesScreen> {
   bool _isPlayerAdding = true;
-
   void addingBet() {
     setState(() {
       _isPlayerAdding = !_isPlayerAdding;
     });
   }
 
-  void changeBet(GameEngine engine, bool isPlayerAdding, final int chipValue) {
+  void changeBet(bool isPlayerAdding, final int chipValue) {
     setState(() {
-      isPlayerAdding ? engine.bet += chipValue : engine.bet -= chipValue;
+      isPlayerAdding
+          ? initialBalance += chipValue
+          : initialBalance -= chipValue;
     });
+  }
+
+  void setBalance(int setInitialBalance) {
+    setInitialBalance = initialBalance.toInt();
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Center(
+          child: BrownText(
+            text: "BALANCE SET",
+            size: 30,
+            weight: FontWeight.bold,
+          ),
+        ),
+        duration: const Duration(seconds: 3),
+        backgroundColor: fancyDarkBrown,
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Padding(
       padding: EdgeInsets.symmetric(vertical: 36, horizontal: 24),
-      width: double.infinity,
-      height: 460,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
-        color: fancyLightBrown,
-      ),
       child: Column(
-        spacing: 16,
+        spacing: 20,
+        mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Column(
-            children: [
-              BrownText(
-                text: "PLACE YOUR BET",
-                size: 32,
-                weight: FontWeight.bold,
-              ),
-              BrownText(
-                text: "BALANCE: ${widget.engine.balance == widget.engine.balance.roundToDouble() ? widget.engine.balance.toInt() : widget.engine.balance}",
-                size: 18,
-                weight: FontWeight.bold,
-              ),
-            ],
-          ),
+          BrownText(text: "INITIAL BALANCE", size: 30, weight: FontWeight.bold),
           Container(
             padding: EdgeInsets.symmetric(vertical: 12, horizontal: 8),
             width: double.infinity,
@@ -95,7 +80,7 @@ class _BettingModalSheet extends State<BettingModalSheet> {
                 Spacer(),
                 BrownText(
                   text:
-                      "\$${widget.engine.bet == widget.engine.bet.roundToDouble() ? widget.engine.bet.toInt() : widget.engine.bet}",
+                      "\$${initialBalance == initialBalance.roundToDouble() ? initialBalance.toInt() : initialBalance}",
                   size: 46,
                   weight: FontWeight.bold,
                 ),
@@ -118,7 +103,7 @@ class _BettingModalSheet extends State<BettingModalSheet> {
                 82,
                 image: 'assets/images/chips-1.png',
                 onPressed: () {
-                  changeBet(widget.engine, _isPlayerAdding, 1);
+                  changeBet(_isPlayerAdding, 1);
                 },
               ),
               ChipsButton(
@@ -126,7 +111,7 @@ class _BettingModalSheet extends State<BettingModalSheet> {
                 94,
                 image: 'assets/images/chips-5.png',
                 onPressed: () {
-                  changeBet(widget.engine, _isPlayerAdding, 5);
+                  changeBet(_isPlayerAdding, 5);
                 },
               ),
               ChipsButton(
@@ -134,7 +119,7 @@ class _BettingModalSheet extends State<BettingModalSheet> {
                 95,
                 image: 'assets/images/chips-25.png',
                 onPressed: () {
-                  changeBet(widget.engine, _isPlayerAdding, 25);
+                  changeBet(_isPlayerAdding, 25);
                 },
               ),
               ChipsButton(
@@ -142,32 +127,31 @@ class _BettingModalSheet extends State<BettingModalSheet> {
                 92,
                 image: 'assets/images/chips-100.png',
                 onPressed: () {
-                  changeBet(widget.engine, _isPlayerAdding, 100);
+                  changeBet(_isPlayerAdding, 100);
                 },
               ),
             ],
           ),
-          Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                BrownButton(
-                  buttonLength: 170,
-                  navigation: () {
-                    goHomeScreen(context, widget.homeScreen);
-                  },
-                  text: 'HOME',
-                ),
-                BrownButton(
-                  buttonLength: 170,
-                  navigation: () {
-                    Navigator.pop(context);
-                  },
-                  text: 'BET',
-                ),
-              ],
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              BrownButton(
+                buttonLength: 170,
+                navigation: () {
+                  ScaffoldMessenger.of(context).clearSnackBars();
+                  widget.homeScreen();
+                },
+                text: 'HOME',
+              ),
+              BrownButton(
+                buttonLength: 170,
+                navigation: () {
+                  setBalance(initialBalance);
+                },
+                text: 'SET',
+              ),
+            ],
           ),
         ],
       ),

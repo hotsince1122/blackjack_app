@@ -53,7 +53,7 @@ class ScrollableRuleList extends StatelessWidget {
                           rule,
                           style: GoogleFonts.merriweather(
                             color: Colors.black,
-                            fontSize: 14,
+                            fontSize: 16,
                             fontWeight: FontWeight.w600,
                           ),
                         ),

@@ -1,7 +1,9 @@
+import 'package:blackjack/blackjack.dart';
 import 'package:blackjack/widgets/big_white_text.dart';
 import 'package:blackjack/widgets/gold_button.dart';
 import 'package:blackjack/engine/game_engine.dart';
 import 'package:blackjack/widgets/betting_modal_sheet.dart';
+import 'package:blackjack/widgets/brown_text.dart';
 
 import 'package:playing_cards/playing_cards.dart';
 import 'package:flutter/material.dart';
@@ -9,9 +11,10 @@ import 'package:flutter/material.dart';
 int nrOfDecks = 1;
 
 class PlayScreen extends StatefulWidget {
-  const PlayScreen(this.homeScreen, {super.key});
+  const PlayScreen(this.homeScreen, this.initialBalance, {super.key});
 
   final void Function() homeScreen;
+  final int initialBalance;
 
   @override
   State<PlayScreen> createState() {
@@ -34,7 +37,7 @@ class _PlayScreenState extends State<PlayScreen> {
       isDismissible: false,
       enableDrag: false,
       context: context,
-      builder: (ctx) => const BettingModalSheet(),
+      builder: (ctx) => BettingModalSheet(widget.homeScreen, engine),
     );
   }
 
@@ -76,7 +79,11 @@ class _PlayScreenState extends State<PlayScreen> {
                 playerCards = [];
                 showBackCard = true;
                 _isPlayerTurn = true;
-                engine.startGame();
+                WidgetsBinding.instance.addPostFrameCallback((_) async {
+                  await _openBettingModalSheet(context);
+
+                  engine.startGame();
+                });
               });
               Navigator.pop(ctx);
             },
@@ -117,6 +124,8 @@ class _PlayScreenState extends State<PlayScreen> {
       isPlayerTurn,
     );
 
+    engine.balance = initialBalance.toDouble();
+
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await _openBettingModalSheet(context);
 
@@ -130,6 +139,7 @@ class _PlayScreenState extends State<PlayScreen> {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        SizedBox(height: 40),
         BigWhiteText(text: "DEALER", size: 42, weight: FontWeight.w600),
         SizedBox(height: 20),
         SizedBox(
@@ -190,7 +200,7 @@ class _PlayScreenState extends State<PlayScreen> {
             ),
           ],
         ),
-        SizedBox(height: 30),
+        SizedBox(height: 10),
         TextButton.icon(
           onPressed: widget.homeScreen,
           icon: Icon(Icons.home, color: Colors.white),
@@ -198,6 +208,32 @@ class _PlayScreenState extends State<PlayScreen> {
             text: "HOME",
             size: 20,
             weight: FontWeight.normal,
+          ),
+        ),
+        Expanded(
+          child: Container(
+            decoration: BoxDecoration(color: fancyLightBrown),
+            child: Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  BrownText(
+                    text:
+                        "BALANCE: ${engine.balance == engine.balance.roundToDouble() ? engine.balance.toInt() : engine.balance}",
+                    size: 24,
+                    weight: FontWeight.bold,
+                  ),
+                  BrownText(
+                    text:
+                        "BET: ${engine.bet == engine.bet.roundToDouble() ? engine.bet.toInt() : engine.bet}",
+                    size: 24,
+                    weight: FontWeight.bold,
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
       ],
