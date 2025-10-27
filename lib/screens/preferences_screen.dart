@@ -7,10 +7,10 @@ import 'package:blackjack/widgets/brown_button.dart';
 import 'package:blackjack/widgets/betting_modal_sheet.dart';
 
 class PreferencesScreen extends StatefulWidget {
-  const PreferencesScreen(this.homeScreen, this.setInitialBalance, {super.key});
+  const PreferencesScreen(this.homeScreen, this.gameData, {super.key});
 
   final void Function() homeScreen;
-  final double setInitialBalance;
+  final GameData gameData;
 
   @override
   State<PreferencesScreen> createState() => _PreferencesScreenState();
@@ -27,13 +27,13 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
   void changeBet(bool isPlayerAdding, final int chipValue) {
     setState(() {
       isPlayerAdding
-          ? initialBalance += chipValue
-          : initialBalance -= chipValue;
+          ? widget.gameData.balance += chipValue
+          : widget.gameData.balance -= chipValue;
     });
   }
 
-  void setBalance(int setInitialBalance) {
-    setInitialBalance = initialBalance.toInt();
+  void setBalance(double setInitialBalance) {
+    setInitialBalance = widget.gameData.balance;
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -80,7 +80,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
                 Spacer(),
                 BrownText(
                   text:
-                      "\$${initialBalance == initialBalance.roundToDouble() ? initialBalance.toInt() : initialBalance}",
+                      "\$${widget.gameData.balance == widget.gameData.balance.roundToDouble() ? widget.gameData.balance.toInt() : widget.gameData.balance}",
                   size: 46,
                   weight: FontWeight.bold,
                 ),
@@ -147,7 +147,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
               BrownButton(
                 buttonLength: 170,
                 navigation: () {
-                  setBalance(initialBalance);
+                  setBalance(widget.gameData.balance);
                 },
                 text: 'SET',
               ),

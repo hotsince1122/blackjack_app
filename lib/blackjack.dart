@@ -9,7 +9,11 @@ import 'package:blackjack/widgets/betting_modal_sheet.dart';
 final Color darkGreenColor = const Color.fromARGB(255, 8, 85, 44);
 final Color goldColor = const Color.fromARGB(255, 208, 170, 70);
 
-int initialBalance = 500;
+class GameData {
+  double balance;
+  
+  GameData(this.balance);
+}
 
 class Blackjack extends StatefulWidget {
   const Blackjack({super.key});
@@ -23,6 +27,8 @@ class Blackjack extends StatefulWidget {
 class _BlackjackState extends State<Blackjack> {
   var activeScreen = 'home-screen';
   Color backgroundColor = darkGreenColor;
+
+  GameData gameData = GameData(1000);
 
   void rulesScreen() {
     setState(() {
@@ -58,11 +64,11 @@ class _BlackjackState extends State<Blackjack> {
     }
 
     if (activeScreen == 'play-screen') {
-      screenWidget = PlayScreen(homeScreen, initialBalance);
+      screenWidget = PlayScreen(homeScreen, gameData);
     }
 
     if (activeScreen == 'preferences-screen') {
-      screenWidget = PreferencesScreen(homeScreen, initialBalance.toDouble());
+      screenWidget = PreferencesScreen(homeScreen, gameData);
       backgroundColor = fancyLightBrown;
     }
 

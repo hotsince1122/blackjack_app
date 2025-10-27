@@ -21,10 +21,11 @@ Future<void> goHomeScreen(
 }
 
 class BettingModalSheet extends StatefulWidget {
-  const BettingModalSheet(this.homeScreen, this.engine, {super.key});
+  const BettingModalSheet(this.homeScreen, this.engine, this.gameData, {super.key});
 
   final void Function() homeScreen;
   final GameEngine engine;
+  final GameData gameData;
 
   @override
   State<BettingModalSheet> createState() {
@@ -69,7 +70,7 @@ class _BettingModalSheet extends State<BettingModalSheet> {
                 weight: FontWeight.bold,
               ),
               BrownText(
-                text: "BALANCE: ${widget.engine.balance == widget.engine.balance.roundToDouble() ? widget.engine.balance.toInt() : widget.engine.balance}",
+                text: "BALANCE: ${widget.gameData.balance == widget.gameData.balance.roundToDouble() ? widget.gameData.balance.toInt() : widget.gameData.balance}",
                 size: 18,
                 weight: FontWeight.bold,
               ),

@@ -1,3 +1,4 @@
+import 'package:blackjack/blackjack.dart';
 import 'package:blackjack/models/playing_card.dart';
 import 'package:playing_cards/playing_cards.dart';
 
@@ -11,6 +12,7 @@ class GameEngine {
     this.dealerScore,
     this.dealerTurnCard,
     this.isPlayerTurn,
+    this.gameData
   ) {
     deck = [];
 
@@ -24,6 +26,7 @@ class GameEngine {
     deck.shuffle();
   }
 
+  final GameData gameData;
 
   final int nrOfDecks;
   late List<PlayingCard> deck;
@@ -43,7 +46,6 @@ class GameEngine {
   int playerScore = 0;
   int dealerScore = 0;
 
-  double balance = 500; 
   double bet = 25;
 
   Future<void> startGame() async {
@@ -68,7 +70,7 @@ class GameEngine {
     }
 
     if (player.isBlackjack()) {
-      balance += bet * 1.5;
+      gameData.balance += bet * 1.5;
       bet = 100;
       gameOver('You won!');
       return;
@@ -95,14 +97,14 @@ class GameEngine {
     await Future.delayed(const Duration(milliseconds: 600));
 
     if (player.isBlackjack()) {
-      balance += bet;
+      gameData.balance += bet;
       bet = 100;
       gameOver('You won!');
       return;
     }
 
     if (player.getTotal() > 21) {
-      balance -= bet;
+      gameData.balance -= bet;
       bet = 100;
       gameOver('Dealer won!');
       return;
@@ -130,7 +132,7 @@ class GameEngine {
 
     if(dealerScore > 21) {
       gameOver('Player won!');
-      balance += bet;
+      gameData.balance += bet;
       bet = 100;
       return;
     }
@@ -143,11 +145,11 @@ class GameEngine {
       bet = 100;
       gameOver('Push!');
     } else if (dealerScore > playerScore) {
-      balance -= bet;
+      gameData.balance -= bet;
       bet = 100;
       gameOver('Dealer won!');
     } else {
-      balance += bet;
+      gameData.balance += bet;
       bet = 100;
       gameOver('You won!');
     }

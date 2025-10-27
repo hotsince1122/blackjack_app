@@ -11,10 +11,10 @@ import 'package:flutter/material.dart';
 int nrOfDecks = 1;
 
 class PlayScreen extends StatefulWidget {
-  const PlayScreen(this.homeScreen, this.initialBalance, {super.key});
+  const PlayScreen(this.homeScreen, this.gameData, {super.key});
 
   final void Function() homeScreen;
-  final int initialBalance;
+  final GameData gameData;
 
   @override
   State<PlayScreen> createState() {
@@ -37,7 +37,7 @@ class _PlayScreenState extends State<PlayScreen> {
       isDismissible: false,
       enableDrag: false,
       context: context,
-      builder: (ctx) => BettingModalSheet(widget.homeScreen, engine),
+      builder: (ctx) => BettingModalSheet(widget.homeScreen, engine, widget.gameData),
     );
   }
 
@@ -122,9 +122,8 @@ class _PlayScreenState extends State<PlayScreen> {
       0,
       dealerTurnCard,
       isPlayerTurn,
+      widget.gameData
     );
-
-    engine.balance = initialBalance.toDouble();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await _openBettingModalSheet(context);
@@ -221,7 +220,7 @@ class _PlayScreenState extends State<PlayScreen> {
                 children: [
                   BrownText(
                     text:
-                        "BALANCE: ${engine.balance == engine.balance.roundToDouble() ? engine.balance.toInt() : engine.balance}",
+                        "BALANCE: ${widget.gameData.balance == widget.gameData.balance.roundToDouble() ? widget.gameData.balance.toInt() : widget.gameData.balance}",
                     size: 24,
                     weight: FontWeight.bold,
                   ),
