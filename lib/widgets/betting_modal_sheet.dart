@@ -43,8 +43,17 @@ class _BettingModalSheet extends State<BettingModalSheet> {
   }
 
   void changeBet(GameEngine engine, bool isPlayerAdding, final int chipValue) {
+    // setState(() {
+    //   isPlayerAdding ? engine.bet += chipValue : engine.bet -= chipValue;
+    // });
+
     setState(() {
-      isPlayerAdding ? engine.bet += chipValue : engine.bet -= chipValue;
+      if(isPlayerAdding && (engine.bet + chipValue) <= widget.gameData.balance) {
+        engine.bet += chipValue;
+      }
+      else {
+        if(engine.bet - chipValue >= 0 && !isPlayerAdding) engine.bet -= chipValue;
+      }
     });
   }
 

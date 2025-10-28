@@ -18,17 +18,20 @@ class PreferencesScreen extends StatefulWidget {
 
 class _PreferencesScreenState extends State<PreferencesScreen> {
   bool _isPlayerAdding = true;
-  void addingBet() {
+  void addingBalance() {
     setState(() {
       _isPlayerAdding = !_isPlayerAdding;
     });
   }
 
-  void changeBet(bool isPlayerAdding, final int chipValue) {
+  void changingBalance(bool isPlayerAdding, final int chipValue) {
     setState(() {
-      isPlayerAdding
-          ? widget.gameData.balance += chipValue
-          : widget.gameData.balance -= chipValue;
+      if(isPlayerAdding) {
+        widget.gameData.balance += chipValue;
+      }
+      else if(widget.gameData.balance - chipValue >= 0) {
+        widget.gameData.balance -= chipValue;
+      }
     });
   }
 
@@ -72,7 +75,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 IconButton(
-                  onPressed: !_isPlayerAdding ? () {} : addingBet,
+                  onPressed: !_isPlayerAdding ? () {} : addingBalance,
                   icon: Icon(Icons.remove),
                   color: !_isPlayerAdding ? goldColor : darkGoldColor,
                   iconSize: 50,
@@ -86,7 +89,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
                 ),
                 Spacer(),
                 IconButton(
-                  onPressed: _isPlayerAdding ? () {} : addingBet,
+                  onPressed: _isPlayerAdding ? () {} : addingBalance,
                   icon: Icon(Icons.add),
                   color: _isPlayerAdding ? goldColor : darkGoldColor,
                   iconSize: 50,
@@ -103,7 +106,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
                 82,
                 image: 'assets/images/chips-1.png',
                 onPressed: () {
-                  changeBet(_isPlayerAdding, 1);
+                  changingBalance(_isPlayerAdding, 1);
                 },
               ),
               ChipsButton(
@@ -111,7 +114,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
                 94,
                 image: 'assets/images/chips-5.png',
                 onPressed: () {
-                  changeBet(_isPlayerAdding, 5);
+                  changingBalance(_isPlayerAdding, 5);
                 },
               ),
               ChipsButton(
@@ -119,7 +122,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
                 95,
                 image: 'assets/images/chips-25.png',
                 onPressed: () {
-                  changeBet(_isPlayerAdding, 25);
+                  changingBalance(_isPlayerAdding, 25);
                 },
               ),
               ChipsButton(
@@ -127,7 +130,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
                 92,
                 image: 'assets/images/chips-100.png',
                 onPressed: () {
-                  changeBet(_isPlayerAdding, 100);
+                  changingBalance(_isPlayerAdding, 100);
                 },
               ),
             ],
