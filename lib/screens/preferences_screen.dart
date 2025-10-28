@@ -17,25 +17,30 @@ class PreferencesScreen extends StatefulWidget {
 }
 
 class _PreferencesScreenState extends State<PreferencesScreen> {
+
+  late double tempBalance;
+
   bool _isPlayerAdding = true;
   void addingBalance() {
     setState(() {
       _isPlayerAdding = !_isPlayerAdding;
+      
     });
   }
 
   void changingBalance(bool isPlayerAdding, final int chipValue) {
     setState(() {
       if(isPlayerAdding) {
-        widget.gameData.balance += chipValue;
+        tempBalance += chipValue;
       }
-      else if(widget.gameData.balance - chipValue >= 0) {
-        widget.gameData.balance -= chipValue;
+      else if(tempBalance - chipValue >= 0) {
+        tempBalance -= chipValue;
       }
     });
   }
 
   void setBalance(double setInitialBalance) {
+    widget.gameData.balance = tempBalance;
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -51,6 +56,12 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
       ),
     );
     widget.gameData.saveBalance(widget.gameData.balance);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    tempBalance = widget.gameData.balance;
   }
 
   @override
@@ -83,7 +94,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
                 Spacer(),
                 BrownText(
                   text:
-                      "\$${widget.gameData.balance == widget.gameData.balance.roundToDouble() ? widget.gameData.balance.toInt() : widget.gameData.balance}",
+                      "\$${tempBalance == tempBalance.roundToDouble() ? tempBalance.toInt() : tempBalance}",
                   size: 46,
                   weight: FontWeight.bold,
                 ),
@@ -150,7 +161,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
               BrownButton(
                 buttonLength: 170,
                 navigation: () {
-                  setBalance(widget.gameData.balance);
+                  setBalance(tempBalance);
                 },
                 text: 'SET',
               ),

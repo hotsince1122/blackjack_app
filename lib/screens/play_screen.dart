@@ -10,6 +10,13 @@ import 'package:flutter/material.dart';
 
 int nrOfDecks = 1;
 
+class EngineData {
+  final GameData gameData;
+  final int nrOfDecks;
+
+  EngineData(this.gameData, this.nrOfDecks);
+}
+
 class PlayScreen extends StatefulWidget {
   const PlayScreen(this.homeScreen, this.gameData, {super.key});
 
@@ -29,7 +36,6 @@ class _PlayScreenState extends State<PlayScreen> {
   late GameEngine engine;
 
   bool showBackCard = true;
-
   bool _isPlayerTurn = true;
 
   Future<void> _openBettingModalSheet(BuildContext context) async {
@@ -48,15 +54,9 @@ class _PlayScreenState extends State<PlayScreen> {
     });
   }
 
-  void dealerDrawsCard(PlayingCard card) {
+  void addCardToUI(PlayingCard card, bool isPlayersCard) {
     setState(() {
-      dealerCards.add(card);
-    });
-  }
-
-  void playerDrawsCard(PlayingCard card) {
-    setState(() {
-      playerCards.add(card);
+      isPlayersCard ? playerCards.add(card) : dealerCards.add(card);
     });
   }
 
@@ -116,11 +116,8 @@ class _PlayScreenState extends State<PlayScreen> {
 
     engine = GameEngine(
       nrOfDecks,
-      dealerDrawsCard,
-      playerDrawsCard,
+      addCardToUI,
       gameOver,
-      0,
-      0,
       dealerTurnCard,
       isPlayerTurn,
       widget.gameData,
