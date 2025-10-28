@@ -5,6 +5,7 @@ import 'package:blackjack/screens/preferences_screen.dart';
 import 'package:blackjack/screens/home_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:blackjack/widgets/betting_modal_sheet.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final Color darkGreenColor = const Color.fromARGB(255, 8, 85, 44);
 final Color goldColor = const Color.fromARGB(255, 208, 170, 70);
@@ -13,6 +14,11 @@ class GameData {
   double balance;
   
   GameData(this.balance);
+
+  Future<void> saveBalance (double balance) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setDouble('balance', balance);
+  }
 }
 
 class Blackjack extends StatefulWidget {
@@ -29,6 +35,20 @@ class _BlackjackState extends State<Blackjack> {
   Color backgroundColor = darkGreenColor;
 
   GameData gameData = GameData(1000);
+
+  Future<void> loadBalance() async {
+    final prefs = await SharedPreferences.getInstance();
+    double? savedBalance = prefs.getDouble('balance');
+
+    if(savedBalance != null) {
+      setState(() {
+        gameData.balance = savedBalance;
+      });
+    }
+    else {
+      gameData.balance = 1000.0;
+    }
+  }
 
   void rulesScreen() {
     setState(() {
@@ -53,6 +73,14 @@ class _BlackjackState extends State<Blackjack> {
       activeScreen = 'preferences-screen';
     });
   }
+
+  @override
+  void initState()
+  {
+    super.initState();
+    loadBalance();
+  }
+
 
   @override
   Widget build(context) {

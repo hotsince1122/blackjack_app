@@ -71,6 +71,7 @@ class GameEngine {
 
     if (player.isBlackjack()) {
       gameData.balance += bet * 1.5;
+      gameData.saveBalance(gameData.balance);
       bet = 100;
       gameOver('You won!');
       return;
@@ -98,6 +99,7 @@ class GameEngine {
 
     if (player.isBlackjack()) {
       gameData.balance += bet;
+      gameData.saveBalance(gameData.balance);
       bet = 100;
       gameOver('You won!');
       return;
@@ -105,6 +107,7 @@ class GameEngine {
 
     if (player.getTotal() > 21) {
       gameData.balance -= bet;
+      gameData.saveBalance(gameData.balance);
       bet = 100;
       gameOver('Dealer won!');
       return;
@@ -133,6 +136,7 @@ class GameEngine {
     if(dealerScore > 21) {
       gameOver('Player won!');
       gameData.balance += bet;
+      gameData.saveBalance(gameData.balance);
       bet = 100;
       return;
     }
@@ -146,10 +150,12 @@ class GameEngine {
       gameOver('Push!');
     } else if (dealerScore > playerScore) {
       gameData.balance -= bet;
+      gameData.saveBalance(gameData.balance);
       bet = 100;
       gameOver('Dealer won!');
     } else {
       gameData.balance += bet;
+      gameData.saveBalance(gameData.balance);
       bet = 100;
       gameOver('You won!');
     }

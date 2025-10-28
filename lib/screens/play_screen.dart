@@ -37,7 +37,8 @@ class _PlayScreenState extends State<PlayScreen> {
       isDismissible: false,
       enableDrag: false,
       context: context,
-      builder: (ctx) => BettingModalSheet(widget.homeScreen, engine, widget.gameData),
+      builder: (ctx) =>
+          BettingModalSheet(widget.homeScreen, engine, widget.gameData),
     );
   }
 
@@ -122,7 +123,7 @@ class _PlayScreenState extends State<PlayScreen> {
       0,
       dealerTurnCard,
       isPlayerTurn,
-      widget.gameData
+      widget.gameData,
     );
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {

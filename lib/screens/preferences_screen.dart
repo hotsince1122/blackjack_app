@@ -33,7 +33,6 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
   }
 
   void setBalance(double setInitialBalance) {
-    setInitialBalance = widget.gameData.balance;
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -48,6 +47,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
         backgroundColor: fancyDarkBrown,
       ),
     );
+    widget.gameData.saveBalance(widget.gameData.balance);
   }
 
   @override

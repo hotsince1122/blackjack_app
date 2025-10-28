@@ -37,6 +37,7 @@ dependencies:
   google_fonts: ^6.3.2
   font_awesome_flutter: ^10.11.0
   playing_cards: ^0.4.1+11
+  shared_preferences: ^2.5.3
 
 dev_dependencies:
   flutter_test:

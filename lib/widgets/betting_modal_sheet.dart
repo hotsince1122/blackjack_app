@@ -163,6 +163,7 @@ class _BettingModalSheet extends State<BettingModalSheet> {
                 BrownButton(
                   buttonLength: 170,
                   navigation: () {
+                    widget.gameData.saveBalance(widget.gameData.balance - widget.engine.bet);
                     Navigator.pop(context);
                   },
                   text: 'BET',
