@@ -58,7 +58,7 @@ class GameEngine {
   }
 
   void handleWinPayout ({required double multiplier, required bool playerWon}) {
-    playerWon ? gameData.balance += bet * multiplier : gameData.balance -= bet;
+    if(playerWon) gameData.balance += bet * multiplier;
     gameData.saveBalance(gameData.balance);
     bet = 100;
   }

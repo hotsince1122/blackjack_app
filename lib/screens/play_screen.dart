@@ -199,7 +199,9 @@ class _PlayScreenState extends State<PlayScreen> {
         ),
         SizedBox(height: 10),
         TextButton.icon(
-          onPressed: widget.homeScreen,
+          onPressed: () {
+            widget.homeScreen();
+          },
           icon: Icon(Icons.home, color: Colors.white),
           label: BigWhiteText(
             text: "HOME",
@@ -218,7 +220,8 @@ class _PlayScreenState extends State<PlayScreen> {
                 children: [
                   BrownText(
                     text:
-                        "BALANCE: ${widget.gameData.balance == widget.gameData.balance.roundToDouble() ? widget.gameData.balance.toInt() : widget.gameData.balance}",
+                        "BALANCE: ${widget.gameData.balance == widget.gameData.balance.roundToDouble()
+                        ? widget.gameData.balance.toInt() : widget.gameData.balance}",
                     size: 24,
                     weight: FontWeight.bold,
                   ),
